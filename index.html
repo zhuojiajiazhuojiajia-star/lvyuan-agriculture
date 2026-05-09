@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="绿源农业 — 致力于提供最优质的有机农产品，有机种植、智能农业、冷链配送一站式服务。">
+  <meta name="keywords" content="有机农业,有机蔬菜,有机水果,绿源农业,农产品电商">
+  <title>绿源农业 — 有机农产品电商平台</title>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- 样式 -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Toast 通知样式 -->
+  <style>
+    [v-cloak] { display: none !important; }
+    .toast-notification {
+      position: fixed;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: rgba(0,0,0,0.78);
+      color: #fff;
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-size: 14px;
+      z-index: 10000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s, transform .3s;
+    }
+    .toast-notification.active {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    .product-desc {
+      font-size: 13px;
+      color: #888;
+      margin: 4px 0 8px;
+      line-height: 1.4;
+    }
+    /* Font Awesome 图标对齐 */
+    .logo-icon i,
+    .nav-icon-btn i,
+    .about-feature-icon i,
+    .social-icon i,
+    .footer-contact-item i {
+        font-size: inherit;
+    }
+  </style>
+
+  <!-- 高德地图 Loader -->
+  <script defer src="https://webapi.amap.com/loader.js"></script>
+
+  <!-- 不蒜子统计 -->
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</head>
+  <body>
+<div id="app" v-cloak>
+
+  <!-- ==================== 顶部品牌信息条 ==================== -->
+  <div class="top-bar">
+    <div class="container top-bar-inner">
+      <span><i class="fa-solid fa-phone"></i> 400-888-6789</span>
+      <span><i class="fa-solid fa-location-dot"></i> {{ state.isChinese ? '北京市延庆区绿源有机农场' : 'Luyuan Organic Farm, Yanqing, Beijing' }}</span>
+      <span class="top-bar-cert">
+        <i class="fa-solid fa-certificate"></i> {{ state.isChinese ? '中国有机产品认证' : 'China Organic Certification' }}
+        <i class="fa-solid fa-shield-halved" style="margin-left:12px;"></i> ISO22000 {{ state.isChinese ? '食品安全' : 'Food Safety' }}
+      </span>
+    </div>
+  </div>
+
+  <!-- ==================== 导航栏 ==================== -->
+  <nav id="navbar" :class="{ scrolled: state.isScrolled }">
+    <div class="navbar-inner">
+      <!-- Logo -->
+      <router-link to="/" class="logo" @click="scrollToTop">
+        <span class="logo-icon"><i class="fa-solid fa-seedling"></i></span>
+        <span class="logo-text">{{ state.isChinese ? '绿源农业' : 'Green Source' }}</span>
+      </router-link>
+
+      <!-- 导航菜单 -->
+      <ul class="nav-menu" :class="{ active: state.showMobileMenu }">
+        <li v-for="item in displayNavItems" :key="item.text" class="nav-menu-item" :class="{ 'has-dropdown': item.children }">
+          <router-link
+            v-if="!item.children"
+            :to="item.route"
+            class="nav-item"
+            @click="state.showMobileMenu = false"
+          >
+            {{ item.displayText }}
+          </router-link>
+          <a
+            v-else
+            class="nav-item"
+            :href="item.href"
+            @click.prevent="item.children && (state.activeDropdown = state.activeDropdown === item.text ? null : item.text)"
+            @mouseenter="item.children && (state.activeDropdown = item.text)"
+            @mouseleave="item.children && (state.activeDropdown = null)"
+          >
+            {{ item.displayText }}
+            <i class="fa-solid fa-chevron-down dropdown-arrow" :class="{ rotated: state.activeDropdown === item.text }"></i>
+          </a>
+          <!-- 下拉菜单 -->
+          <ul v-if="item.children" class="dropdown-menu" :class="{ show: state.activeDropdown === item.text }" @mouseenter="state.activeDropdown = item.text" @mouseleave="state.activeDropdown = null">
+            <li v-for="child in item.children" :key="child.text">
+              <a class="dropdown-item" href="javascript:void(0)" @click.prevent="navigateTo(child.route, child.href)">{{ child.displayText }}</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+
+      <!-- 移动端图标组 -->
+      <div class="nav-icons mobile-icons">
+        <button class="nav-icon-btn" :title="state.isChinese ? '搜索' : 'Search'" @click="openSearch"><i class="fa-solid fa-magnifying-glass"></i></button>
+        <button class="nav-icon-btn" :title="state.isChinese ? '购物车' : 'Cart'" style="position:relative;" @click="openCart">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <span class="cart-badge">{{ state.cartCount }}</span>
+        </button>
+        <button class="nav-icon-btn" :title="state.isChinese ? '用户' : 'User'" @click="openAuthModal"><i class="fa-solid fa-user"></i></button>
+      </div>
+
+      <!-- 桌面端图标组 -->
+      <div class="nav-icons desktop-icons">
+        <!-- 语言切换按钮 -->
+        <button class="nav-icon-btn lang-toggle-btn" :title="state.isChinese ? '切换语言' : 'Switch Language'" @click="toggleLanguage">
+          <span>{{ currentLang === 'zh' ? 'EN' : '中' }}</span>
+        </button>
+        <!-- 主题切换按钮 -->
+        <button class="nav-icon-btn theme-toggle-btn" :title="state.isChinese ? '切换主题' : 'Toggle Theme'" @click="toggleTheme">
+          <span v-if="state.isDarkTheme"><i class="fa-solid fa-sun"></i></span>
+          <span v-else><i class="fa-solid fa-moon"></i></span>
+        </button>
+        <button class="nav-icon-btn" :title="state.isChinese ? '搜索' : 'Search'" @click="openSearch"><i class="fa-solid fa-magnifying-glass"></i></button>
+        <button class="nav-icon-btn" :title="state.isChinese ? '购物车' : 'Cart'" style="position:relative;" @click="openCart">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <span class="cart-badge">{{ state.cartCount }}</span>
+        </button>
+        <button class="nav-icon-btn" :title="state.isChinese ? '用户' : 'User'" @click="openAuthModal"><i class="fa-solid fa-user"></i></button>
+      </div>
+
+      <!-- 汉堡菜单 -->
+      <button class="hamburger" :class="{ active: state.showMobileMenu }" @click="toggleMobileMenu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+
+  <!-- ==================== 路由视图 ==================== -->
+  <router-view v-slot="{ Component }">
+    <transition name="page-fade" mode="out-in">
+      <component :is="Component" />
+    </transition>
+  </router-view>
+
+
+  <!-- ==================== 页脚 ==================== -->
+  <footer id="footer" class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <!-- 品牌介绍 -->
+        <div class="footer-brand">
+          <router-link to="/" class="logo" @click="scrollToTop">
+            <span class="logo-icon"><i class="fa-solid fa-seedling"></i></span>
+            <span class="logo-text">{{ state.isChinese ? '绿源农业' : 'Green Source' }}</span>
+          </router-link>
+          <p>{{ state.isChinese ? '绿源农业成立于2000年，专注有机农产品种植与销售25年。我们致力于为消费者提供最安全、最健康的有机食品，让每一个家庭都能享受到大自然的馈赠。' : 'Founded in 2000, Green Source Agriculture has been dedicated to organic farming for 25 years. We are committed to providing the safest and healthiest organic food for every family.' }}</p>
+          <div class="footer-social">
+            <a href="#" class="social-icon" :title="state.isChinese ? '微信' : 'WeChat'"><i class="fa-brands fa-weixin"></i></a>
+            <a href="#" class="social-icon" :title="state.isChinese ? '微博' : 'Weibo'"><i class="fa-brands fa-weibo"></i></a>
+            <a href="#" class="social-icon" :title="state.isChinese ? '抖音' : 'TikTok'"><i class="fa-brands fa-tiktok"></i></a>
+            <a href="#" class="social-icon" :title="state.isChinese ? '小红书' : 'Xiaohongshu'"><i class="fa-solid fa-book-open"></i></a>
+          </div>
+        </div>
+
+        <!-- 快速链接 -->
+        <div class="footer-column">
+          <h4>{{ state.isChinese ? '快速链接' : 'Quick Links' }}</h4>
+          <ul>
+            <li><router-link to="/">{{ state.isChinese ? '首页' : 'Home' }}</router-link></li>
+            <li><router-link to="/story">{{ state.isChinese ? '关于我们' : 'About Us' }}</router-link></li>
+            <li><router-link to="/products">{{ state.isChinese ? '产品中心' : 'Products' }}</router-link></li>
+            <li><router-link to="/cases">{{ state.isChinese ? '项目案例' : 'Projects' }}</router-link></li>
+          </ul>
+        </div>
+
+        <!-- 服务项目 -->
+        <div class="footer-column">
+          <h4>{{ state.isChinese ? '服务项目' : 'Services' }}</h4>
+          <ul>
+            <li><router-link to="/products">{{ state.isChinese ? '有机蔬菜' : 'Organic Vegetables' }}</router-link></li>
+            <li><router-link to="/products">{{ state.isChinese ? '有机水果' : 'Organic Fruits' }}</router-link></li>
+            <li><router-link to="/products">{{ state.isChinese ? '优质谷物' : 'Premium Grains' }}</router-link></li>
+            <li><router-link to="/products">{{ state.isChinese ? '乳制品' : 'Dairy Products' }}</router-link></li>
+          </ul>
+        </div>
+
+        <!-- 联系方式 -->
+        <div class="footer-column">
+          <h4>{{ state.isChinese ? '联系方式' : 'Contact Us' }}</h4>
+          <div class="footer-contact-item">
+            <span><i class="fa-solid fa-location-dot"></i></span>
+            <span>{{ state.isChinese ? '北京市朝阳区绿源路88号' : 'No.88 Luyuan Road, Chaoyang, Beijing' }}</span>
+          </div>
+          <div class="footer-contact-item">
+            <span><i class="fa-solid fa-phone"></i></span>
+            <span>400-888-9999</span>
+          </div>
+          <div class="footer-contact-item">
+            <span><i class="fa-solid fa-envelope"></i></span>
+            <span>contact@luyuanagri.cn</span>
+          </div>
+          <div class="footer-contact-item">
+            <span><i class="fa-regular fa-clock"></i></span>
+            <span>{{ state.isChinese ? '周一至周日 8:00 - 20:00' : 'Mon-Sun 8:00 - 20:00' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 底部版权 -->
+      <div class="footer-bottom">
+        <p>&copy; 2025 {{ state.isChinese ? '绿源农业' : 'Green Source' }} All Rights Reserved. | <span id="busuanzi_container_site_pv">{{ state.isChinese ? '站点总访问量' : 'Total Visits' }}<span id="busuanzi_value_site_pv"></span>{{ state.isChinese ? '次' : '' }}</span></p>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ==================== 购物车侧边栏 ==================== -->
+  <div class="cart-overlay" v-if="state.showCart" @click="closeCart"></div>
+  <aside class="cart-sidebar" :class="{ active: state.showCart }">
+    <div class="cart-header">
+      <h3>{{ state.isChinese ? '购物车' : 'Shopping Cart' }}</h3>
+      <button class="cart-close" @click="closeCart">&times;</button>
+    </div>
+    <div class="cart-items" v-if="state.cartItems && state.cartItems.length > 0">
+      <div class="cart-item" v-for="(item, index) in state.cartItems" :key="item.product.id">
+        <div class="cart-item-img">
+          <img :src="item.product.image" :alt="item.product.displayName || item.product.name">
+        </div>
+        <div class="cart-item-info">
+          <div class="cart-item-name">{{ item.product.displayName || item.product.name }}</div>
+          <div class="cart-item-price">&yen;{{ (item.product.price || 0).toFixed(1) }}</div>
+          <div class="cart-item-quantity">
+            <button class="qty-btn" @click="updateQuantity(index, -1)">-</button>
+            <span class="qty-num">{{ item.quantity }}</span>
+            <button class="qty-btn" @click="updateQuantity(index, 1)">+</button>
+          </div>
+        </div>
+        <button class="cart-item-remove" @click="removeFromCart(index)">&times;</button>
+      </div>
+    </div>
+    <div class="cart-empty" v-else>
+      <div class="icon"><i class="fa-solid fa-cart-shopping"></i></div>
+      <p>{{ state.isChinese ? '购物车是空的' : 'Your cart is empty' }}</p>
+    </div>
+    <div class="cart-footer" v-if="state.cartItems && state.cartItems.length > 0">
+      <div class="cart-total">
+        <span class="cart-total-label">{{ state.isChinese ? '合计' : 'Total' }}</span>
+        <span class="cart-total-price">&yen;{{ (state.cartTotal || 0).toFixed(2) }}</span>
+      </div>
+      <button class="checkout-btn" @click="checkout">{{ state.isChinese ? '去结算' : 'Checkout' }}</button>
+    </div>
+  </aside>
+
+
+  <!-- ==================== 登录注册弹窗 ==================== -->
+  <div class="modal-overlay" v-if="state.showAuthModal" @click.self="closeAuthModal">
+    <div class="modal">
+      <button class="modal-close" @click="closeAuthModal">&times;</button>
+
+      <!-- 登录 -->
+      <div v-if="state.authMode === 'login'">
+        <div class="modal-logo">
+          <i class="fa-solid fa-seedling"></i>
+          <span>{{ state.isChinese ? '绿源农业' : 'Green Source' }}</span>
+        </div>
+        <h3 class="modal-title">{{ state.isChinese ? '欢迎回来' : 'Welcome Back' }}</h3>
+        <p class="modal-subtitle">{{ state.isChinese ? '登录后可查看订单' : 'Login to view orders' }}，{{ state.isChinese ? '收藏喜欢的农产品' : 'and save your favorites' }}</p>
+
+        <!-- 扫码登录 -->
+        <div class="qr-login-section">
+          <div class="qr-tabs">
+            <button :class="{ active: state.loginMethod === 'qr' }" @click="state.loginMethod = 'qr'">{{ state.isChinese ? '扫码登录' : 'Scan to Login' }}</button>
+            <button :class="{ active: state.loginMethod === 'password' }" @click="state.loginMethod = 'password'">{{ state.isChinese ? '密码登录' : 'Password Login' }}</button>
+          </div>
+          <!-- 二维码区域 -->
+          <div class="qr-code-area" v-if="state.loginMethod === 'qr'">
+            <div class="qr-code-box" :class="{ expired: state.qrExpired }">
+              <div class="qr-placeholder" v-if="!state.qrExpired">
+                <i class="fa-brands fa-weixin" style="font-size:48px;color:#07C160;" v-if="state.qrType === 'wechat'"></i>
+                <i class="fa-brands fa-qq" style="font-size:48px;color:#12B7F5;" v-if="state.qrType === 'qq'"></i>
+                <p style="margin-top:8px;font-size:12px;color:#999;">
+                  {{ state.isChinese ? '打开' : 'Open' }}{{ state.qrType === 'wechat' ? (state.isChinese ? '微信' : ' WeChat') : (state.isChinese ? 'QQ' : ' QQ') }}{{ state.isChinese ? '扫一扫' : ' to scan' }}
+                </p>
+              </div>
+              <div class="qr-expired" v-if="state.qrExpired">
+                <i class="fa-solid fa-rotate-right" style="font-size:32px;color:#999;"></i>
+                <p>{{ state.isChinese ? '二维码已过期' : 'QR Code Expired' }}</p>
+                <button class="qr-refresh" @click="refreshQrCode">{{ state.isChinese ? '点击刷新' : 'Refresh' }}</button>
+              </div>
+            </div>
+            <div class="qr-switch">
+              <button :class="{ active: state.qrType === 'wechat' }" @click="state.qrType = 'wechat'; refreshQrCode()">
+                <i class="fa-brands fa-weixin"></i> {{ state.isChinese ? '微信登录' : 'WeChat Login' }}
+              </button>
+              <button :class="{ active: state.qrType === 'qq' }" @click="state.qrType = 'qq'; refreshQrCode()">
+                <i class="fa-brands fa-qq"></i> {{ state.isChinese ? 'QQ登录' : 'QQ Login' }}
+              </button>
+            </div>
+          </div>
+          <!-- 密码登录区域 -->
+          <div class="password-login-area" v-if="state.loginMethod === 'password'">
+            <div class="form-group">
+              <label>{{ state.isChinese ? '手机号 / 邮箱' : 'Phone / Email' }}</label>
+              <input type="text" :placeholder="state.isChinese ? '请输入手机号或邮箱' : 'Enter phone or email'" v-model="state.loginForm.username">
+            </div>
+            <div class="form-group">
+              <label>{{ state.isChinese ? '密码' : 'Password' }}</label>
+              <input type="password" :placeholder="state.isChinese ? '请输入密码' : 'Enter password'" v-model="state.loginForm.password">
+            </div>
+            <div class="form-options">
+              <label><input type="checkbox"> {{ state.isChinese ? '7天内免登录' : 'Auto login for 7 days' }}</label>
+              <a href="javascript:void(0)" style="color:#4CAF50;">{{ state.isChinese ? '忘记密码？' : 'Forgot Password?' }}</a>
+            </div>
+            <button class="btn-primary auth-submit-btn" @click="login">{{ state.isChinese ? '登 录' : 'Login' }}</button>
+          </div>
+        </div>
+
+        <p class="form-switch">{{ state.isChinese ? '还没有账号？' : 'No account?' }}<a href="javascript:void(0)" @click="switchAuthMode('register')">{{ state.isChinese ? '立即注册' : 'Register Now' }}</a></p>
+      </div>
+
+      <!-- 注册 -->
+      <div v-else>
+        <div class="modal-logo">
+          <i class="fa-solid fa-seedling"></i>
+          <span>{{ state.isChinese ? '绿源农业' : 'Green Source' }}</span>
+        </div>
+        <h3 class="modal-title">{{ state.isChinese ? '创建账户' : 'Create Account' }}</h3>
+        <p class="modal-subtitle">{{ state.isChinese ? '注册成为会员' : 'Register as member' }}，{{ state.isChinese ? '首单立减 20 元' : 'Get 20 CNY off your first order' }}</p>
+
+        <div class="form-group">
+          <label>{{ state.isChinese ? '手机号' : 'Phone Number' }}</label>
+          <input type="text" :placeholder="state.isChinese ? '请输入手机号' : 'Enter phone number'" v-model="state.registerForm.username">
+        </div>
+        <div class="form-group">
+          <label>{{ state.isChinese ? '验证码' : 'Verification Code' }}</label>
+          <div class="code-input-group">
+            <input type="text" :placeholder="state.isChinese ? '请输入验证码' : 'Enter verification code'" v-model="state.registerForm.code" style="flex:1;">
+            <button class="send-code-btn" @click="sendVerifyCode" :disabled="state.codeCooldown > 0">
+              {{ state.codeCooldown > 0 ? state.codeCooldown + (state.isChinese ? 's 后重发' : 's to retry') : (state.isChinese ? '获取验证码' : 'Get Code') }}
+            </button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>{{ state.isChinese ? '设置密码' : 'Set Password' }}</label>
+          <input type="password" :placeholder="state.isChinese ? '请设置密码（至少6位）' : 'Set password (min 6 chars)'" v-model="state.registerForm.password">
+        </div>
+        <div class="form-group">
+          <label>{{ state.isChinese ? '确认密码' : 'Confirm Password' }}</label>
+          <input type="password" :placeholder="state.isChinese ? '请再次输入密码' : 'Confirm password'" v-model="state.registerForm.confirm">
+        </div>
+        <button class="btn-primary auth-submit-btn" @click="register">{{ state.isChinese ? '注 册' : 'Register' }}</button>
+
+        <div class="form-divider">{{ state.isChinese ? '或使用以下方式注册' : 'Or register with' }}</div>
+        <div class="social-login">
+          <button class="social-btn wechat-btn" @click="state.qrType = 'wechat'; switchAuthMode('login'); state.loginMethod = 'qr'">
+            <i class="fa-brands fa-weixin"></i> {{ state.isChinese ? '微信一键注册' : 'WeChat Register' }}
+          </button>
+          <button class="social-btn qq-btn" @click="state.qrType = 'qq'; switchAuthMode('login'); state.loginMethod = 'qr'">
+            <i class="fa-brands fa-qq"></i> {{ state.isChinese ? 'QQ一键注册' : 'QQ Register' }}
+          </button>
+        </div>
+
+        <p class="form-switch">{{ state.isChinese ? '已有账号？' : 'Already have an account?' }}<a href="javascript:void(0)" @click="switchAuthMode('login')">{{ state.isChinese ? '立即登录' : 'Login Now' }}</a></p>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==================== 搜索弹窗 ==================== -->
+  <div class="search-modal" v-if="state.showSearch" @click.self="closeSearch">
+    <div class="search-modal-content">
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input
+          class="search-input"
+          type="text"
+          :placeholder="state.isChinese ? '搜索有机蔬菜、水果、谷物...' : 'Search organic vegetables, fruits, grains...'"
+          v-model="state.searchKeyword"
+          @keyup.enter="handleSearch"
+          ref="searchInput"
+        >
+        <button class="search-clear" v-if="state.searchKeyword" @click="state.searchKeyword = ''">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+        <button class="search-btn" @click="handleSearch">{{ state.isChinese ? '搜索' : 'Search' }}</button>
+      </div>
+      <div class="search-suggestions" v-if="state.searchKeyword && filteredProducts.length > 0">
+        <div class="search-suggestions-title">{{ state.isChinese ? '搜索结果' : 'Results' }}</div>
+        <a
+          class="search-suggestion-item"
+          v-for="product in filteredProducts.slice(0, 5)"
+          :key="product.id"
+          href="javascript:void(0)"
+          @click.prevent="handleSearch"
+        >
+          <img class="suggestion-img" :src="product.image" :alt="product.displayName">
+          <div class="suggestion-info">
+            <span class="suggestion-name">{{ product.displayName }}</span>
+            <span class="suggestion-price">&yen;{{ (product.price || 0).toFixed(1) }}</span>
+          </div>
+        </a>
+      </div>
+      <div class="search-empty" v-if="state.searchKeyword && filteredProducts.length === 0">
+        <i class="fa-solid fa-face-meh"></i>
+        <span>{{ state.isChinese ? '没有找到相关产品' : 'No products found' }}</span>
+      </div>
+      <div class="search-hints" v-if="!state.searchKeyword">
+        <span class="search-hints-label">{{ state.isChinese ? '热门搜索' : 'Popular' }}：</span>
+        <span class="search-hint-tag" v-for="tag in (state.isChinese ? ['有机番茄','红葡萄','有机生菜'] : ['Tomato','Grapes','Lettuce'])" :key="tag" @click="state.searchKeyword = tag; handleSearch()">{{ tag }}</span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==================== Toast 通知 ==================== -->
+  <div class="toast-notification" :class="{ active: state.cartToast }">{{ state.cartToast }}</div>
+
+  <!-- ==================== 回到顶部 ==================== -->
+  <button
+    class="back-to-top"
+    :class="{ visible: state.showBackToTop }"
+    @click="scrollToTop"
+    :title="state.isChinese ? '回到顶部' : 'Back to Top'"
+  ><i class="fa-solid fa-chevron-up"></i></button>
+
+</div>
+
+<!-- Vue 3 CDN -->
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<!-- Vue Router CDN -->
+<script src="https://unpkg.com/vue-router@4/dist/vue-router.global.prod.js"></script>
+<!-- API 服务 -->
+<script src="js/api.js"></script>
+<!-- 主逻辑 -->
+<script src="js/main.js?v=6"></script>
+
+</body>
+</html>
