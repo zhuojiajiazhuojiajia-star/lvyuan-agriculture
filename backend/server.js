@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(morgan('dev'));
 
 // 数据库连接
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/lvyuan_farm')
+mongoose.connect(process.env.MONGODB_URI || process.env.MONGO_URL || 'mongodb://localhost:27017/lvyuan_farm')
   .then(() => console.log('✅ MongoDB 连接成功'))
   .catch(err => console.error('❌ MongoDB 连接失败:', err));
 
