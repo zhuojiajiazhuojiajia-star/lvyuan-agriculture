@@ -1,4 +1,8 @@
-const API_BASE_URL = 'http://localhost:3000/api';
+// ====== API 地址配置 ======
+// 部署时只需要修改这里的地址即可
+// 本地开发: http://localhost:3000/api
+// Render部署后: https://你的项目名.onrender.com/api
+const API_BASE_URL = window.__API_URL__ || 'http://localhost:3000/api';
 
 class ApiService {
   constructor() {
