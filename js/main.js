@@ -1591,8 +1591,16 @@ const app = createApp({
       state.showMobileMenu = false;
       document.body.style.overflow = '';
       
-      // 直接跳转路由，让 Vue Router 处理
-      router.push(route);
+      // 如果当前路由和目标路由相同（只是 query 不同），需要先跳到无 query 再跳回来
+      const currentPath = router.currentRoute.value.fullPath;
+      if (currentPath === route) {
+        // 完全相同的路由，先跳到根再回来
+        router.push('/').then(() => {
+          setTimeout(() => router.push(route), 50);
+        });
+      } else {
+        router.push(route);
+      }
     }
 
     function handleScroll() {
