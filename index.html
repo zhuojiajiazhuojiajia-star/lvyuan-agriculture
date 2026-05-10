@@ -286,16 +286,33 @@
         <!-- 扫码登录 -->
         <div class="qr-login-section">
           <div class="qr-tabs">
-            <button :class="{ active: state.loginMethod === 'github' }" @click="state.loginMethod = 'github'">{{ state.isChinese ? 'GitHub 登录' : 'GitHub Login' }}</button>
+            <button :class="{ active: state.loginMethod === 'qr' }" @click="state.loginMethod = 'qr'">{{ state.isChinese ? '扫码登录' : 'Scan to Login' }}</button>
             <button :class="{ active: state.loginMethod === 'password' }" @click="state.loginMethod = 'password'">{{ state.isChinese ? '密码登录' : 'Password Login' }}</button>
           </div>
-          <!-- GitHub 登录区域 -->
-          <div class="qr-code-area" v-if="state.loginMethod === 'github'" style="text-align:center;padding:30px 0;">
-            <i class="fa-brands fa-github" style="font-size:64px;color:#333;"></i>
-            <p style="margin:16px 0 24px;color:#666;">{{ state.isChinese ? '使用 GitHub 账号快速登录' : 'Login with your GitHub account' }}</p>
-            <a :href="apiBaseUrl.replace('/api','') + '/api/auth/github'" class="btn-primary auth-submit-btn" style="display:inline-block;text-decoration:none;background:#333;">
-              <i class="fa-brands fa-github"></i> {{ state.isChinese ? '使用 GitHub 登录' : 'Login with GitHub' }}
-            </a>
+          <!-- 二维码区域 -->
+          <div class="qr-code-area" v-if="state.loginMethod === 'qr'">
+            <div class="qr-code-box" :class="{ expired: state.qrExpired }">
+              <div class="qr-placeholder" v-if="!state.qrExpired">
+                <i class="fa-brands fa-weixin" style="font-size:48px;color:#07C160;" v-if="state.qrType === 'wechat'"></i>
+                <i class="fa-brands fa-qq" style="font-size:48px;color:#12B7F5;" v-if="state.qrType === 'qq'"></i>
+                <p style="margin-top:8px;font-size:12px;color:#999;">
+                  {{ state.isChinese ? '打开' : 'Open' }}{{ state.qrType === 'wechat' ? (state.isChinese ? '微信' : ' WeChat') : (state.isChinese ? 'QQ' : ' QQ') }}{{ state.isChinese ? '扫一扫' : ' to scan' }}
+                </p>
+              </div>
+              <div class="qr-expired" v-if="state.qrExpired">
+                <i class="fa-solid fa-rotate-right" style="font-size:32px;color:#999;"></i>
+                <p>{{ state.isChinese ? '二维码已过期' : 'QR Code Expired' }}</p>
+                <button class="qr-refresh" @click="refreshQrCode">{{ state.isChinese ? '点击刷新' : 'Refresh' }}</button>
+              </div>
+            </div>
+            <div class="qr-switch">
+              <button :class="{ active: state.qrType === 'wechat' }" @click="state.qrType = 'wechat'; refreshQrCode()">
+                <i class="fa-brands fa-weixin"></i> {{ state.isChinese ? '微信登录' : 'WeChat Login' }}
+              </button>
+              <button :class="{ active: state.qrType === 'qq' }" @click="state.qrType = 'qq'; refreshQrCode()">
+                <i class="fa-brands fa-qq"></i> {{ state.isChinese ? 'QQ登录' : 'QQ Login' }}
+              </button>
+            </div>
           </div>
           <!-- 密码登录区域 -->
           <div class="password-login-area" v-if="state.loginMethod === 'password'">
