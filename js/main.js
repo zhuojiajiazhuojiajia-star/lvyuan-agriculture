@@ -1723,11 +1723,10 @@ const app = createApp({
 
     function openAuthModal(form) {
       state.authMode = (typeof form === 'string' && form) ? form : 'login';
-      state.loginMethod = 'qr';
+      state.loginMethod = 'password';
       state.authError = '';
       state.showAuthModal = true;
       document.body.style.overflow = 'hidden';
-      refreshQrCode();
     }
 
     function closeAuthModal() {
