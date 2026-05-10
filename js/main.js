@@ -319,14 +319,34 @@ const ProductsPage = {
     const kw = this.$route.query.keyword || '';
     if (kw) this.searchKeyword = kw;
     const cat = this.$route.query.category || '';
-    if (cat) this.currentCategory = cat;
+    if (cat) {
+      this.currentCategory = cat;
+      // 首次加载时滚动到产品区域
+      this.$nextTick(() => {
+        setTimeout(() => {
+          const el = document.querySelector('#products');
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 300);
+      });
+    }
   },
   watch: {
     '$route.query.keyword'(val) {
       this.searchKeyword = val || '';
     },
     '$route.query.category'(val) {
-      if (val) this.currentCategory = val;
+      if (val) {
+        this.currentCategory = val;
+        // 滚动到产品区域
+        this.$nextTick(() => {
+          const el = document.querySelector('#products');
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      }
     }
   },
   computed: {
@@ -1549,50 +1569,19 @@ const app = createApp({
       state.showMobileMenu = false;
       document.body.style.overflow = '';
       if (!href || href === '#') return;
-      // 等待 DOM 渲染
-      setTimeout(() => {
-        const el = document.querySelector(href);
-        if (el) {
-          const offset = el.offsetTop - 80;
-          window.scrollTo({ top: offset, behavior: 'smooth' });
-        }
-      }, 100);
+      const el = document.querySelector(href);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }
 
     function navigateTo(route, href) {
       state.activeDropdown = null;
       state.showMobileMenu = false;
       document.body.style.overflow = '';
-      const currentPath = router.currentRoute.value.fullPath;
-      const targetPath = route.split('?')[0];
-      const currentPathNoQuery = currentPath.split('?')[0];
-
-      // 如果路由带有 ?project= 参数，让目标页面组件内部处理滚动
-      if (route.includes('project=')) {
-        if (currentPathNoQuery === targetPath) {
-          // 同一页面，需要重新触发 watch
-          router.push({ path: targetPath, query: {} }).then(() => {
-            router.push(route);
-          });
-        } else {
-          router.push(route);
-        }
-        return;
-      }
-
-      if (currentPathNoQuery === targetPath) {
-        // 同一页面，直接滚动
-        Vue.nextTick(() => {
-          setTimeout(() => scrollToAnchor(href), 300);
-        });
-      } else {
-        // 不同页面，先跳转再滚动
-        router.push(route).then(() => {
-          Vue.nextTick(() => {
-            setTimeout(() => scrollToAnchor(href), 500);
-          });
-        });
-      }
+      
+      // 直接跳转路由，让 Vue Router 处理
+      router.push(route);
     }
 
     function handleScroll() {
