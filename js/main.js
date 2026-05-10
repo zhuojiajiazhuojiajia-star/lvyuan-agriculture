@@ -1773,7 +1773,7 @@ const app = createApp({
       }
 
       try {
-        const data = await api.login({ email: username, password });
+        const data = await api.login({ username: username, password });
         state.isLoggedIn = true;
         state.username = data.user.username;
         state.currentUser = data.user;
