@@ -29,7 +29,7 @@ const productSchema = new mongoose.Schema({
   category: {
     type: String,
     required: true,
-    enum: ['vegetable', 'fruit', 'grain', 'dairy', 'meat', 'other']
+    enum: ['vegetables', 'fruits', 'grains', 'dairy', 'meat', 'other']
   },
   images: [{
     type: String
