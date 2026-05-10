@@ -1591,8 +1591,25 @@ const app = createApp({
       state.showMobileMenu = false;
       document.body.style.overflow = '';
       
-      // 如果当前路由和目标路由相同（只是 query 不同），需要先跳到无 query 再跳回来
       const currentPath = router.currentRoute.value.fullPath;
+      const currentPathNoQuery = currentPath.split('?')[0];
+      const targetPath = route.split('?')[0];
+      
+      // 如果 href 是锚点（以 # 开头）
+      if (href && href.startsWith('#')) {
+        if (currentPathNoQuery === targetPath) {
+          // 同一页面，直接滚动到锚点
+          scrollToAnchor(href);
+        } else {
+          // 不同页面，先跳转再滚动
+          router.push(route).then(() => {
+            setTimeout(() => scrollToAnchor(href), 300);
+          });
+        }
+        return;
+      }
+      
+      // 如果当前路由和目标路由相同（只是 query 不同），需要先跳到无 query 再跳回来
       if (currentPath === route) {
         // 完全相同的路由，先跳到根再回来
         router.push('/').then(() => {
