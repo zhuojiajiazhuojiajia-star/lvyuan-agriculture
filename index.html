@@ -118,7 +118,7 @@
         <button class="nav-icon-btn" :title="state.isChinese ? '搜索' : 'Search'" @click="openSearch"><i class="fa-solid fa-magnifying-glass"></i></button>
         <button class="nav-icon-btn" :title="state.isChinese ? '购物车' : 'Cart'" style="position:relative;" @click="openCart">
           <i class="fa-solid fa-cart-shopping"></i>
-          <span class="cart-badge">{{ state.cartCount }}</span>
+          <span class="cart-badge">{{ cartCount }}</span>
         </button>
         <button class="nav-icon-btn" :title="state.isChinese ? '用户' : 'User'" @click="openAuthModal"><i class="fa-solid fa-user"></i></button>
       </div>
@@ -137,7 +137,7 @@
         <button class="nav-icon-btn" :title="state.isChinese ? '搜索' : 'Search'" @click="openSearch"><i class="fa-solid fa-magnifying-glass"></i></button>
         <button class="nav-icon-btn" :title="state.isChinese ? '购物车' : 'Cart'" style="position:relative;" @click="openCart">
           <i class="fa-solid fa-cart-shopping"></i>
-          <span class="cart-badge">{{ state.cartCount }}</span>
+          <span class="cart-badge">{{ cartCount }}</span>
         </button>
         <button class="nav-icon-btn" :title="state.isChinese ? '用户' : 'User'" @click="openAuthModal"><i class="fa-solid fa-user"></i></button>
       </div>
@@ -262,7 +262,7 @@
     <div class="cart-footer" v-if="state.cartItems && state.cartItems.length > 0">
       <div class="cart-total">
         <span class="cart-total-label">{{ state.isChinese ? '合计' : 'Total' }}</span>
-        <span class="cart-total-price">&yen;{{ (state.cartTotal || 0).toFixed(2) }}</span>
+        <span class="cart-total-price">&yen;{{ cartTotal.toFixed(2) }}</span>
       </div>
       <button class="checkout-btn" @click="checkout">{{ state.isChinese ? '去结算' : 'Checkout' }}</button>
     </div>
