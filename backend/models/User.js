@@ -10,6 +10,11 @@ const userSchema = new mongoose.Schema({
     minlength: 3,
     maxlength: 20
   },
+  githubId: {
+    type: String,
+    unique: true,
+    sparse: true
+  },
   email: {
     type: String,
     required: true,

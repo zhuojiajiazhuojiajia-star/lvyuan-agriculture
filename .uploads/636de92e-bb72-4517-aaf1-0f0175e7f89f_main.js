@@ -82,7 +82,7 @@ const HomePage = {
         <div class="container">
           <div class="founder-card">
             <div class="founder-avatar">
-              <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&q=80" alt="张明远">
+              <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80" alt="张明远">
             </div>
             <div class="founder-content">
               <div class="founder-quote-icon"><i class="fa-solid fa-quote-left"></i></div>
@@ -318,15 +318,10 @@ const ProductsPage = {
   created() {
     const kw = this.$route.query.keyword || '';
     if (kw) this.searchKeyword = kw;
-    const cat = this.$route.query.category || '';
-    if (cat) this.currentCategory = cat;
   },
   watch: {
     '$route.query.keyword'(val) {
       this.searchKeyword = val || '';
-    },
-    '$route.query.category'(val) {
-      if (val) this.currentCategory = val;
     }
   },
   computed: {
@@ -359,7 +354,7 @@ const StoryPage = {
         </div>
       </section>
       <!-- 关于我们（完整版） -->
-      <section id="about" class="section section-alt">
+      <section class="section section-alt">
         <div class="container">
           <div class="about-grid">
             <div class="about-images">
@@ -387,10 +382,10 @@ const StoryPage = {
         </div>
       </section>
       <!-- 创始人说 -->
-      <section id="founder" class="section founder-section">
+      <section class="section founder-section">
         <div class="container">
           <div class="founder-card">
-            <div class="founder-avatar"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&q=80" alt="张明远"></div>
+            <div class="founder-avatar"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80" alt="张明远"></div>
             <div class="founder-content">
               <div class="founder-quote-icon"><i class="fa-solid fa-quote-left"></i></div>
               <p class="founder-text">{{ state.isChinese ? "2000年承包第一块地的时候，村里人都说我们傻——不打药不上化肥，菜长得又小又丑，卖给谁？我说不急，先养地。养了三年，土壤活了，虫子少了，种出来的东西自己吃着都觉得不一样。现在回头看，当初那股傻劲儿是对的。做农业没有捷径，你得对得起这片土地。" : "When we leased our first plot of land in 2000, the villagers all said we were foolish — no pesticides, no chemical fertilizers, the vegetables were small and ugly, who would buy them? I said do not worry, we should nourish the soil first. After three years, the soil came alive, pests diminished, and even we could taste the difference. Looking back now, that foolishness was right. There are no shortcuts in farming — you must honor the land." }}</p>
@@ -402,51 +397,8 @@ const StoryPage = {
           </div>
         </div>
       </section>
-      <!-- 发展历程 -->
-      <section id="milestones" class="section section-alt">
-        <div class="container">
-          <h2 class="section-title">{{ state.isChinese ? '发展' : 'Our' }}<span>{{ state.isChinese ? '历程' : 'Milestones' }}</span></h2>
-          <p class="section-subtitle">{{ state.isChinese ? '25年有机农业之路，每一步都算数' : '25 years of organic farming, every step counts' }}</p>
-          <div class="timeline">
-            <div class="timeline-item" v-for="(item, index) in milestones" :key="item.year" :class="{ right: index % 2 }">
-              <div class="timeline-dot"></div>
-              <div class="timeline-content">
-                <span class="timeline-year">{{ item.year }}</span>
-                <h4>{{ state.isChinese ? item.title : item.titleEn }}</h4>
-                <p>{{ state.isChinese ? item.desc : item.descEn }}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <!-- 有机认证 -->
-      <section id="certifications" class="section">
-        <div class="container">
-          <h2 class="section-title">{{ state.isChinese ? '有机' : 'Organic' }}<span>{{ state.isChinese ? '认证' : 'Certifications' }}</span></h2>
-          <p class="section-subtitle">{{ state.isChinese ? '权威认证，品质保障' : 'Authoritative certifications, quality guaranteed' }}</p>
-          <div class="cert-grid">
-            <div class="cert-card" v-for="cert in certifications" :key="cert.title">
-              <div class="cert-icon"><i :class="cert.icon"></i></div>
-              <h4>{{ state.isChinese ? cert.title : cert.titleEn }}</h4>
-              <p>{{ state.isChinese ? cert.desc : cert.descEn }}</p>
-              <span class="cert-badge">{{ state.isChinese ? cert.badge : cert.badgeEn }}</span>
-            </div>
-          </div>
-          <div class="cert-process">
-            <h3 style="text-align:center;margin-bottom:32px;">{{ state.isChinese ? '从田间到餐桌的全程追溯' : 'Full Traceability from Farm to Table' }}</h3>
-            <div class="process-steps">
-              <div class="process-step" v-for="(step, idx) in processSteps" :key="idx">
-                <div class="process-step-icon"><i :class="step.icon"></i></div>
-                <span class="process-step-num">0{{ idx + 1 }}</span>
-                <h5>{{ state.isChinese ? step.title : step.titleEn }}</h5>
-                <p>{{ state.isChinese ? step.desc : step.descEn }}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
       <!-- 团队成员 -->
-      <section id="team" class="section section-alt">
+      <section class="section section-alt">
         <div class="container">
           <h2 class="section-title">{{ state.isChinese ? '认识我们的' : 'Meet Our' }}<span>{{ state.isChinese ? '团队' : 'Team' }}</span></h2>
           <p class="section-subtitle">{{ state.isChinese ? '专业团队，用心服务每一位客户' : 'Professional team dedicated to every customer' }}</p>
@@ -461,7 +413,7 @@ const StoryPage = {
       </section>
     </div>
   `,
-  inject: ['state', 'displayTeam', 'displayMilestones', 'displayCertifications', 'displayProcessSteps'],
+  inject: ['state', 'displayTeam'],
 };
 
 // ========== 项目案例页组件 ==========
@@ -474,10 +426,10 @@ const CasesPage = {
           <p style="color:#c8e6c9;font-size:16px;">{{ state.isChinese ? '从金色麦田到智能温室，记录我们的每一步' : 'From Golden Fields to Smart Greenhouses' }}</p>
         </div>
       </section>
-      <section id="projects" class="section">
+      <section class="section">
         <div class="container">
           <div class="case-list">
-            <div v-for="(project, index) in displayProjects" :key="project.title" class="case-item" :class="{ reverse: index % 2, 'case-highlight': highlightProject === index }">
+            <div v-for="(project, index) in displayProjects" :key="project.title" class="case-item" :class="{ reverse: index % 2 }">
               <div class="case-img">
                 <img :src="project.image" :alt="project.displayTitle">
               </div>
@@ -494,54 +446,8 @@ const CasesPage = {
           </div>
         </div>
       </section>
-      <!-- 企业合作 -->
-      <section id="enterprise" class="section section-alt">
-        <div class="container">
-          <h2 class="section-title">{{ state.isChinese ? '企业' : 'Enterprise' }}<span>{{ state.isChinese ? '合作' : 'Partnership' }}</span></h2>
-          <p class="section-subtitle">{{ state.isChinese ? '为企事业单位提供一站式有机食材解决方案' : 'One-stop organic food solutions for enterprises' }}</p>
-          <div class="enterprise-grid">
-            <div class="enterprise-card" v-for="item in displayEnterpriseServices" :key="item.title">
-              <div class="enterprise-icon"><i :class="item.icon"></i></div>
-              <h4>{{ state.isChinese ? item.title : item.titleEn }}</h4>
-              <p>{{ state.isChinese ? item.desc : item.descEn }}</p>
-              <ul class="enterprise-features">
-                <li v-for="f in item.features" :key="f">{{ f }}</li>
-              </ul>
-            </div>
-          </div>
-          <div class="enterprise-stats">
-            <div class="enterprise-stat-item" v-for="stat in displayEnterpriseStats" :key="stat.label">
-              <span class="enterprise-stat-num">{{ stat.num }}</span>
-              <span class="enterprise-stat-label">{{ state.isChinese ? stat.label : stat.labelEn }}</span>
-            </div>
-          </div>
-        </div>
-      </section>
-      <!-- 订阅套餐 -->
-      <section id="subscriptions" class="section">
-        <div class="container">
-          <h2 class="section-title">{{ state.isChinese ? '订阅' : 'Subscription' }}<span>{{ state.isChinese ? '套餐' : 'Plans' }}</span></h2>
-          <p class="section-subtitle">{{ state.isChinese ? '新鲜有机蔬菜，每周配送到家' : 'Fresh organic produce, delivered to your door weekly' }}</p>
-          <div class="pricing-grid">
-            <div class="pricing-card" v-for="plan in displaySubscriptionPlans" :key="plan.name" :class="{ featured: plan.featured }">
-              <div class="pricing-badge" v-if="plan.featured">{{ state.isChinese ? '最受欢迎' : 'Most Popular' }}</div>
-              <h4 class="pricing-name">{{ state.isChinese ? plan.name : plan.nameEn }}</h4>
-              <div class="pricing-price">
-                <span class="pricing-currency">&yen;</span>
-                <span class="pricing-amount">{{ plan.price }}</span>
-                <span class="pricing-period">/{{ state.isChinese ? plan.period : plan.periodEn }}</span>
-              </div>
-              <p class="pricing-desc">{{ state.isChinese ? plan.desc : plan.descEn }}</p>
-              <ul class="pricing-features">
-                <li v-for="f in plan.features" :key="f"><i class="fa-solid fa-check"></i> {{ f }}</li>
-              </ul>
-              <button class="btn-primary" style="width:100%;margin-top:auto;">{{ state.isChinese ? '立即订阅' : 'Subscribe Now' }}</button>
-            </div>
-          </div>
-        </div>
-      </section>
       <!-- 客户评价 -->
-      <section id="testimonials" class="section section-alt">
+      <section class="section section-alt">
         <div class="container">
           <h2 class="section-title">{{ state.isChinese ? '客户' : 'Customer' }}<span>{{ state.isChinese ? '评价' : 'Testimonials' }}</span></h2>
           <p class="section-subtitle">{{ state.isChinese ? '听听我们的客户怎么说' : 'What our customers say' }}</p>
@@ -561,40 +467,7 @@ const CasesPage = {
       </section>
     </div>
   `,
-  inject: ['state', 'displayProjects', 'displayTestimonials', 'displayEnterpriseServices', 'displayEnterpriseStats', 'displaySubscriptionPlans'],
-  data() { return { highlightProject: -1 }; },
-  created() {
-    const idx = this.$route.query.project;
-    if (idx !== undefined && idx !== null) {
-      this.highlightProject = parseInt(idx);
-    }
-  },
-  mounted() {
-    if (this.highlightProject >= 0) {
-      setTimeout(() => {
-        const items = document.querySelectorAll('.case-item');
-        if (items[this.highlightProject]) {
-          const offset = items[this.highlightProject].offsetTop - 100;
-          window.scrollTo({ top: offset, behavior: 'smooth' });
-          items[this.highlightProject].classList.add('case-highlight');
-        }
-      }, 300);
-    }
-  },
-  watch: {
-    '$route.query.project'(val) {
-      if (val !== undefined && val !== null) {
-        this.highlightProject = parseInt(val);
-        setTimeout(() => {
-          const items = document.querySelectorAll('.case-item');
-          if (items[this.highlightProject]) {
-            const offset = items[this.highlightProject].offsetTop - 100;
-            window.scrollTo({ top: offset, behavior: 'smooth' });
-          }
-        }, 300);
-      }
-    }
-  },
+  inject: ['state', 'displayProjects', 'displayTestimonials'],
 };
 
 // ========== 联系我们页组件 ==========
@@ -719,7 +592,7 @@ const app = createApp({
       // ---- 用户认证状态 ----
       showAuthModal: false,
       authMode: 'login',
-      loginMethod: 'github',
+      loginMethod: 'qr',
       qrType: 'wechat',
       qrExpired: false,
       codeCooldown: 0,
@@ -999,166 +872,6 @@ const app = createApp({
           originalPrice: 24.0,
           category: 'dairy',
         },
-        {
-          id: 17,
-          name: '有机菠菜',
-          nameEn: 'Organic Spinach',
-          desc: '叶片肥厚，铁含量高',
-          descEn: 'Thick leaves, rich in iron',
-          image: 'https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=400&q=80',
-          images: [
-            'https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=400&q=80',
-            'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&q=80',
-            'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=400&q=80',
-          ],
-          price: 9.8,
-          originalPrice: 14.0,
-          category: 'vegetable',
-        },
-        {
-          id: 18,
-          name: '有机彩椒',
-          nameEn: 'Organic Bell Pepper',
-          desc: '红黄彩椒，甜脆多汁',
-          descEn: 'Colorful sweet bell peppers, crisp and juicy',
-          image: 'https://images.unsplash.com/photo-1563565375-f3fdfdbefa83?w=400&q=80',
-          images: [
-            'https://images.unsplash.com/photo-1563565375-f3fdfdbefa83?w=400&q=80',
-            'https://images.unsplash.com/photo-1592548868664-f8b4e4b1cfb7?w=400&q=80',
-            'https://images.unsplash.com/photo-1625675411855-534ee6b464ac?w=400&q=80',
-          ],
-          price: 13.8,
-          originalPrice: 19.0,
-          category: 'vegetable',
-        },
-        {
-          id: 19,
-          name: '有机红薯',
-          nameEn: 'Organic Sweet Potato',
-          desc: '蜜薯品种，软糯香甜',
-          descEn: 'Honey variety, soft and sweet',
-          image: 'https://images.unsplash.com/photo-1570723735746-c9bd51bd7c40?w=400&q=80',
-          images: [
-            'https://images.unsplash.com/photo-1570723735746-c9bd51bd7c40?w=400&q=80',
-            'https://images.unsplash.com/photo-1580324613766-3b5d415bb34a?w=400&q=80',
-            'https://images.unsplash.com/photo-1680472628312-9ff2605ee718?w=400&q=80',
-          ],
-          price: 8.5,
-          originalPrice: 12.0,
-          category: 'vegetable',
-        },
-        {
-          id: 20,
-          name: '有机橙子',
-          nameEn: 'Organic Orange',
-          desc: '赣南脐橙，皮薄汁多',
-          descEn: 'Gannan navel orange, thin skin, juicy',
-          image: 'https://images.unsplash.com/photo-1547514701-42782101795e?w=400&q=80',
-          images: [
-            'https://images.unsplash.com/photo-1547514701-42782101795e?w=400&q=80',
-            'https://images.unsplash.com/photo-1611080626919-7cf5a9dbab5b?w=400&q=80',
-            'https://images.unsplash.com/photo-1582979512210-99b6a53386f9?w=400&q=80',
-          ],
-          price: 22.0,
-          originalPrice: 30.0,
-          category: 'fruit',
-        },
-        {
-          id: 21,
-          name: '有机猕猴桃',
-          nameEn: 'Organic Kiwi',
-          desc: '翠香品种，维C之王',
-          descEn: 'Cuixiang variety, king of Vitamin C',
-          image: 'https://images.unsplash.com/photo-1528498033373-3c6c08e93d79?w=400&q=80',
-          images: [
-            'https://images.unsplash.com/photo-1528498033373-3c6c08e93d79?w=400&q=80',
-            'https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=400&q=80',
-            'https://images.unsplash.com/photo-1596547609652-9cf5d8d76921?w=400&q=80',
-          ],
-          price: 25.0,
-          originalPrice: 35.0,
-          category: 'fruit',
-        },
-        {
-          id: 22,
-          name: '有机樱桃',
-          nameEn: 'Organic Cherry',
-          desc: '烟台大樱桃，粒大肉厚',
-          descEn: 'Yantai cherry, large and meaty',
-          image: 'https://images.unsplash.com/photo-1528821154947-1aa3d1b74941?w=400&q=80',
-          images: [
-            'https://images.unsplash.com/photo-1528821154947-1aa3d1b74941?w=400&q=80',
-            'https://images.unsplash.com/photo-1520236060906-9c5ed525b025?w=400&q=80',
-            'https://images.unsplash.com/photo-1559181567-c3190ca9959b?w=400&q=80',
-          ],
-          price: 45.0,
-          originalPrice: 60.0,
-          category: 'fruit',
-        },
-        {
-          id: 23,
-          name: '有机小米',
-          nameEn: 'Organic Millet',
-          desc: '陕北黄小米，熬粥浓香',
-          descEn: 'Northern Shaanxi yellow millet, rich porridge aroma',
-          image: 'https://images.unsplash.com/photo-1768729341679-8a2da8e5b5fa?w=400&q=80',
-          images: [
-            'https://images.unsplash.com/photo-1768729341679-8a2da8e5b5fa?w=400&q=80',
-            'https://images.unsplash.com/photo-1768729339998-909158957162?w=400&q=80',
-            'https://images.unsplash.com/photo-1651241587503-a874db54a1a7?w=400&q=80',
-          ],
-          price: 19.9,
-          originalPrice: 28.0,
-          category: 'grain',
-        },
-        {
-          id: 24,
-          name: '有机黄豆',
-          nameEn: 'Organic Soybeans',
-          desc: '东北非转基因黄豆，蛋白含量高',
-          descEn: 'Northeast non-GMO soybeans, high protein',
-          image: 'https://images.unsplash.com/photo-1601993488142-d3050a16478d?w=400&q=80',
-          images: [
-            'https://images.unsplash.com/photo-1601993488142-d3050a16478d?w=400&q=80',
-            'https://images.unsplash.com/photo-1639843606783-b2f9c50a7468?w=400&q=80',
-            'https://images.unsplash.com/photo-1728931340275-430196814dc5?w=400&q=80',
-          ],
-          price: 16.8,
-          originalPrice: 22.0,
-          category: 'grain',
-        },
-        {
-          id: 25,
-          name: '有机土鸡蛋',
-          nameEn: 'Organic Free-range Eggs',
-          desc: '林下散养土鸡，蛋黄饱满',
-          descEn: 'Free-range hens, rich golden yolks',
-          image: 'https://images.unsplash.com/photo-1587486913049-53fc88980cfc?w=400&q=80',
-          images: [
-            'https://images.unsplash.com/photo-1587486913049-53fc88980cfc?w=400&q=80',
-            'https://images.unsplash.com/photo-1639194335563-d56b83f0060c?w=400&q=80',
-            'https://images.unsplash.com/photo-1506976785307-8732e854ad03?w=400&q=80',
-          ],
-          price: 29.9,
-          originalPrice: 38.0,
-          category: 'dairy',
-        },
-        {
-          id: 26,
-          name: '有机蜂蜜',
-          nameEn: 'Organic Honey',
-          desc: '百花蜜，天然纯正无添加',
-          descEn: 'Wildflower honey, pure and additive-free',
-          image: 'https://images.unsplash.com/photo-1587049352851-8d4e89133924?w=400&q=80',
-          images: [
-            'https://images.unsplash.com/photo-1587049352851-8d4e89133924?w=400&q=80',
-            'https://images.unsplash.com/photo-1605880980331-20a711b27338?w=400&q=80',
-            'https://images.unsplash.com/photo-1471943311424-646960669fbc?w=400&q=80',
-          ],
-          price: 58.0,
-          originalPrice: 78.0,
-          category: 'dairy',
-        },
       ],
 
       // 特色服务
@@ -1242,82 +955,22 @@ const app = createApp({
           nameEn: 'Zhang Mingyuan',
           role: '创始人 / CEO',
           roleEn: 'Founder / CEO',
-          avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&q=80',
+          avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80',
         },
         {
           name: '李晓芳',
           nameEn: 'Li Xiaofang',
           role: '首席农业专家',
           roleEn: 'Chief Agronomist',
-          avatar: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=200&q=80',
+          avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=80',
         },
         {
           name: '王建国',
           nameEn: 'Wang Jianguo',
           role: '技术总监',
           roleEn: 'Tech Director',
-          avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80',
+          avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&q=80',
         },
-      ],
-
-      // 发展历程
-      milestones: [
-        { year: '2000', title: '创业起步', titleEn: 'Humble Beginnings', desc: '在北京延庆承包第一块50亩试验田，开始有机种植探索之路。', descEn: 'Leased our first 50-mu trial field in Yanqing, Beijing, and began exploring organic farming.' },
-        { year: '2002', title: '土壤改良', titleEn: 'Soil Restoration', desc: '耗时两年对退化土地进行有机改良，建立蚯蚓堆肥和绿肥轮作体系。', descEn: 'Spent two years restoring degraded soil with vermicomposting and green manure crop rotation.' },
-        { year: '2005', title: '获得有机认证', titleEn: 'Organic Certified', desc: '首批产品通过国家有机产品认证，正式进入有机农产品市场。', descEn: 'First products passed national organic certification, officially entering the organic market.' },
-        { year: '2008', title: '社区支持农业', titleEn: 'CSA Program', desc: '推出"社区支持农业"模式，首批200个家庭加入每周蔬菜配送计划。', descEn: 'Launched Community Supported Agriculture (CSA) program with 200 founding member families.' },
-        { year: '2010', title: '规模扩展', titleEn: 'Scaling Up', desc: '农场扩展至500亩，合作农户达到30家，建立标准化生产流程。', descEn: 'Farm expanded to 500 mu with 30 partner farmers. Established standardized production processes.' },
-        { year: '2013', title: '农旅融合', titleEn: 'Agri-tourism', desc: '开放农场体验项目，年均接待游客超5000人次，获评"北京市休闲农业示范园"。', descEn: 'Opened farm experience programs, hosting 5,000+ visitors annually. Named "Beijing Leisure Agriculture Demonstration Farm."' },
-        { year: '2015', title: '智能农业升级', titleEn: 'Smart Farming', desc: '引入物联网传感器和智能温室系统，实现精准灌溉和环境监控。', descEn: 'Introduced IoT sensors and smart greenhouse systems for precision irrigation and environmental monitoring.' },
-        { year: '2018', title: '冷链物流体系', titleEn: 'Cold Chain Logistics', desc: '建成自有冷链仓储中心，实现凌晨采摘、当日配送的供应链体系。', descEn: 'Built our own cold chain warehouse, achieving a dawn-harvest, same-day delivery supply chain.' },
-        { year: '2020', title: '电商平台上线', titleEn: 'E-commerce Launch', desc: '绿源农业电商平台正式上线，开启线上线下一体化销售模式。', descEn: 'Green Source e-commerce platform officially launched, integrating online and offline sales.' },
-        { year: '2022', title: '碳中和农场', titleEn: 'Carbon Neutral Farm', desc: '启动碳中和计划，安装太阳能板和沼气发电系统，实现农场运营零碳排放。', descEn: 'Launched carbon neutrality plan with solar panels and biogas systems, achieving zero-carbon farm operations.' },
-        { year: '2023', title: '千亩生态农场', titleEn: '1,000-Mu Eco Farm', desc: '农场规模突破1000亩，合作农户超过100家，服务家庭超20万户。', descEn: 'Farm exceeded 1,000 mu with 100+ partner farmers, serving over 200,000 families.' },
-        { year: '2024', title: '国际认证', titleEn: 'Global Certification', desc: '获得EU Organic、USDA Organic和JAS有机认证，产品远销海外12个国家。', descEn: 'Obtained EU Organic, USDA Organic, and JAS certifications. Products exported to 12 countries.' },
-        { year: '2025', title: '行业标杆', titleEn: 'Industry Leader', desc: '连续三年有机抽检100%合格，获评"北京市农业龙头企业"称号。', descEn: 'Three consecutive years of 100% organic inspection pass rate. Named "Beijing Agricultural Leading Enterprise."' },
-      ],
-
-      // 有机认证
-      certifications: [
-        { icon: 'fa-solid fa-certificate', title: '中国有机产品认证', titleEn: 'China Organic Certification', desc: '通过国家认监委有机产品认证，每年复审，确保全程符合有机标准。', descEn: 'Certified by CNCA, annually reviewed to ensure full compliance with organic standards.', badge: 'CNCA', badgeEn: 'CNCA' },
-        { icon: 'fa-solid fa-shield-halved', title: 'ISO 22000 食品安全', titleEn: 'ISO 22000 Food Safety', desc: '国际食品安全管理体系认证，从原料到成品全链条管控。', descEn: 'International food safety management system certification, full chain control from raw materials to finished products.', badge: 'ISO 22000', badgeEn: 'ISO 22000' },
-        { icon: 'fa-solid fa-leaf', title: 'Global G.A.P. 认证', titleEn: 'Global G.A.P.', desc: '全球良好农业规范认证，产品可出口至欧盟、日本等国际市场。', descEn: 'Global Good Agricultural Practices certification, products exportable to EU, Japan and other international markets.', badge: 'G.A.P.', badgeEn: 'G.A.P.' },
-        { icon: 'fa-solid fa-seedling', title: '绿色食品认证', titleEn: 'Green Food Certification', desc: '中国绿色食品发展中心认证，A级绿色食品标准。', descEn: 'Certified by China Green Food Development Center, Grade A green food standard.', badge: 'A级', badgeEn: 'Grade A' },
-        { icon: 'fa-solid fa-globe', title: 'EU Organic 欧盟有机', titleEn: 'EU Organic', desc: '通过欧盟有机认证，符合欧盟最严格的有机法规EC 834/2007。', descEn: 'EU organic certified, meeting the strictest EU organic regulation EC 834/2007.', badge: 'EU', badgeEn: 'EU' },
-        { icon: 'fa-solid fa-flag-usa', title: 'USDA Organic 美国有机', titleEn: 'USDA Organic', desc: '通过美国农业部国家有机计划(NOP)认证。', descEn: 'Certified by USDA National Organic Program (NOP).', badge: 'USDA', badgeEn: 'USDA' },
-        { icon: 'fa-solid fa-microscope', title: 'HACCP 危害分析', titleEn: 'HACCP', desc: '国际认可的食品安全预防控制体系，对生产各环节进行危害分析和关键控制点管理。', descEn: 'Internationally recognized food safety preventive control system with hazard analysis and critical control points.', badge: 'HACCP', badgeEn: 'HACCP' },
-        { icon: 'fa-solid fa-recycle', title: '碳中和认证', titleEn: 'Carbon Neutral', desc: '通过第三方核查，农场运营实现碳中和，太阳能和沼气发电覆盖全部用电需求。', descEn: 'Third-party verified carbon neutral farm operations. Solar and biogas systems cover all electricity needs.', badge: '零碳', badgeEn: 'Zero Carbon' },
-      ],
-
-      // 追溯流程
-      processSteps: [
-        { icon: 'fa-solid fa-seedling', title: '有机播种', titleEn: 'Organic Sowing', desc: '使用经过认证的有机种子，在检测合格的土壤中播种。', descEn: 'Certified organic seeds sown in tested, approved soil.' },
-        { icon: 'fa-solid fa-droplet', title: '生态灌溉', titleEn: 'Eco Irrigation', desc: '采用滴灌技术，使用经过净化的山泉水灌溉。', descEn: 'Drip irrigation with purified mountain spring water.' },
-        { icon: 'fa-solid fa-sun', title: '自然生长', titleEn: 'Natural Growth', desc: '不使用化学农药和化肥，依靠生物防治和有机堆肥。', descEn: 'No chemical pesticides or fertilizers. Biological pest control and organic compost only.' },
-        { icon: 'fa-solid fa-hand-sparkles', title: '人工采摘', titleEn: 'Hand Picked', desc: '凌晨4点人工采摘，确保果蔬在最佳成熟度时收获。', descEn: 'Hand-picked at 4 AM to ensure optimal ripeness at harvest.' },
-        { icon: 'fa-solid fa-temperature-low', title: '冷链运输', titleEn: 'Cold Chain Transport', desc: '全程0-4°C冷链运输，锁住新鲜与营养。', descEn: 'Full cold chain at 0-4°C to lock in freshness and nutrition.' },
-        { icon: 'fa-solid fa-qrcode', title: '扫码溯源', titleEn: 'QR Traceability', desc: '每份产品附带追溯码，扫码查看从播种到配送的全过程。', descEn: 'Every product includes a traceability QR code. Scan to view the full journey from sowing to delivery.' },
-      ],
-
-      // 企业合作服务
-      enterpriseServices: [
-        { icon: 'fa-solid fa-building', title: '企业食堂直供', titleEn: 'Corporate Cafeteria Supply', desc: '为企事业单位食堂提供每日新鲜有机蔬菜和肉类，支持定制化菜单。', descEn: 'Daily fresh organic vegetables and meat for corporate cafeterias with customizable menus.', features: ['每日配送', '定制菜单', '品质保障', '专属客服'] },
-        { icon: 'fa-solid fa-store', title: '商超渠道合作', titleEn: 'Supermarket Partnership', desc: '与大型商超建立长期合作关系，提供稳定的有机产品供应链。', descEn: 'Long-term partnerships with major supermarkets for a stable organic product supply chain.', features: ['稳定供货', '品牌专区', '联合营销', '退换保障'] },
-        { icon: 'fa-solid fa-utensils', title: '餐饮企业定制', titleEn: 'Restaurant Customization', desc: '为高端餐厅和连锁餐饮提供专属有机食材解决方案。', descEn: 'Exclusive organic ingredient solutions for premium restaurants and chain dining.', features: ['专属品种', '规格定制', '优先配送', '季节限定'] },
-      ],
-
-      enterpriseStats: [
-        { num: '200+', label: '合作企业', labelEn: 'Partner Enterprises' },
-        { num: '50万+', label: '年供应量(斤)', labelEn: 'Annual Supply (kg)' },
-        { num: '99.8%', label: '客户满意度', labelEn: 'Customer Satisfaction' },
-        { num: '24h', label: '售后响应', labelEn: 'After-sales Response' },
-      ],
-
-      // 订阅套餐
-      subscriptionPlans: [
-        { name: '体验装', nameEn: 'Starter', price: '68', period: '周', periodEn: 'week', desc: '适合1-2人小家庭，每周体验当季有机蔬菜。', descEn: 'Perfect for 1-2 person households. Weekly seasonal organic veggies.', featured: false, features: ['3-4种当季蔬菜', '约3kg/周', '每周一定时配送', '随时可取消'] },
-        { name: '家庭装', nameEn: 'Family', price: '128', period: '周', periodEn: 'week', desc: '适合3-5人家庭，蔬菜水果搭配，营养均衡。', descEn: 'Ideal for 3-5 person families. Veggies and fruits for balanced nutrition.', featured: true, features: ['6-8种蔬果搭配', '约5kg/周', '每周一定时配送', '附赠食谱卡', '专属客服'] },
-        { name: '尊享装', nameEn: 'Premium', price: '238', period: '周', periodEn: 'week', desc: '适合追求品质生活的家庭，包含稀有品种和进口有机食材。', descEn: 'For families who demand the best. Includes rare varieties and imported organic ingredients.', featured: false, features: ['10-12种精选蔬果', '约8kg/周', '每周一定时配送', '含稀有品种', '附赠食谱+礼品', 'VIP专属客服'] },
       ],
 
       // 客户评价
@@ -1328,7 +981,7 @@ const app = createApp({
           stars: 4,
           name: '陈女士',
           nameEn: 'Ms. Chen',
-          avatar: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=100&q=80',
+          avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80',
         },
         {
           text: '给公司食堂供了半年菜，品质比较稳定。偶尔有一两箱状态不太好，客服处理还算及时。',
@@ -1336,7 +989,7 @@ const app = createApp({
           stars: 4,
           name: '刘经理',
           nameEn: 'Mr. Liu',
-          avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&q=80',
+          avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80',
         },
         {
           text: '带孩子去农场参观过，小孩第一次知道番茄是长在藤上的不是超市里长出来的。体验不错，就是周末人太多了。',
@@ -1344,7 +997,7 @@ const app = createApp({
           stars: 5,
           name: '赵先生',
           nameEn: 'Mr. Zhao',
-          avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=80',
+          avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=100&q=80',
         },
       ],
 
@@ -1380,24 +1033,20 @@ const app = createApp({
       navItems: [
         { text: '首页', textEn: 'Home', route: '/', href: '#hero' },
         { text: '有机产品', textEn: 'Products', route: '/products', href: '#products', children: [
-          { text: '新鲜蔬菜', textEn: 'Fresh Vegetables', route: '/products?category=vegetable', href: '#products' },
-          { text: '有机水果', textEn: 'Organic Fruits', route: '/products?category=fruit', href: '#products' },
-          { text: '优质谷物', textEn: 'Premium Grains', route: '/products?category=grain', href: '#products' },
-          { text: '乳制品', textEn: 'Dairy Products', route: '/products?category=dairy', href: '#products' },
+          { text: '新鲜蔬菜', textEn: 'Fresh Vegetables', route: '/products', href: '#products' },
+          { text: '有机水果', textEn: 'Organic Fruits', route: '/products', href: '#products' },
+          { text: '优质谷物', textEn: 'Premium Grains', route: '/products', href: '#products' },
+          { text: '乳制品', textEn: 'Dairy Products', route: '/products', href: '#products' },
         ]},
         { text: '农场故事', textEn: 'Our Story', route: '/story', href: '#about', children: [
           { text: '关于我们', textEn: 'About Us', route: '/story', href: '#about' },
           { text: '创始人说', textEn: "Founder's Words", route: '/story', href: '#founder' },
-          { text: '发展历程', textEn: 'Milestones', route: '/story', href: '#milestones' },
-          { text: '有机认证', textEn: 'Certifications', route: '/story', href: '#certifications' },
           { text: '团队成员', textEn: 'Team', route: '/story', href: '#team' },
         ]},
         { text: '客户案例', textEn: 'Cases', route: '/cases', href: '#testimonials', children: [
-          { text: '金色麦田', textEn: 'Golden Wheat', route: '/cases?project=0', href: '#projects' },
-          { text: '智能温室', textEn: 'Smart Greenhouse', route: '/cases?project=1', href: '#projects' },
-          { text: '生态农场', textEn: 'Eco Farm', route: '/cases?project=2', href: '#projects' },
-          { text: '企业合作', textEn: 'Enterprise', route: '/cases', href: '#enterprise' },
-          { text: '订阅套餐', textEn: 'Subscriptions', route: '/cases', href: '#subscriptions' },
+          { text: '金色麦田', textEn: 'Golden Wheat', route: '/cases', href: '#projects' },
+          { text: '智能温室', textEn: 'Smart Greenhouse', route: '/cases', href: '#projects' },
+          { text: '生态农场', textEn: 'Eco Farm', route: '/cases', href: '#projects' },
         ]},
         { text: '联系我们', textEn: 'Contact', route: '/contact', href: '#footer' },
       ],
@@ -1488,13 +1137,6 @@ const app = createApp({
       );
     });
 
-    const displayMilestones = computed(() => state.milestones);
-    const displayCertifications = computed(() => state.certifications);
-    const displayProcessSteps = computed(() => state.processSteps);
-    const displayEnterpriseServices = computed(() => state.enterpriseServices);
-    const displayEnterpriseStats = computed(() => state.enterpriseStats);
-    const displaySubscriptionPlans = computed(() => state.subscriptionPlans);
-
     // ========== Provide 共享数据给子组件 ==========
     provide('state', state);
     provide('displayProducts', displayProducts);
@@ -1502,12 +1144,6 @@ const app = createApp({
     provide('displayServices', displayServices);
     provide('displayProjects', displayProjects);
     provide('displayTeam', displayTeam);
-    provide('displayMilestones', displayMilestones);
-    provide('displayCertifications', displayCertifications);
-    provide('displayProcessSteps', displayProcessSteps);
-    provide('displayEnterpriseServices', displayEnterpriseServices);
-    provide('displayEnterpriseStats', displayEnterpriseStats);
-    provide('displaySubscriptionPlans', displaySubscriptionPlans);
     provide('displayTestimonials', displayTestimonials);
     provide('displayNews', displayNews);
     provide('addToCart', addToCart);
@@ -1556,42 +1192,6 @@ const app = createApp({
       }
     }
 
-    function navigateTo(route, href) {
-      state.activeDropdown = null;
-      state.showMobileMenu = false;
-      document.body.style.overflow = '';
-      const currentPath = router.currentRoute.value.fullPath;
-      const targetPath = route.split('?')[0];
-      const currentPathNoQuery = currentPath.split('?')[0];
-
-      // 如果路由带有 ?project= 参数，让目标页面组件内部处理滚动
-      if (route.includes('project=')) {
-        if (currentPathNoQuery === targetPath) {
-          // 同一页面，需要重新触发 watch
-          router.push({ path: targetPath, query: {} }).then(() => {
-            router.push(route);
-          });
-        } else {
-          router.push(route);
-        }
-        return;
-      }
-
-      if (currentPathNoQuery === targetPath) {
-        // 同一页面，直接滚动
-        Vue.nextTick(() => {
-          setTimeout(() => scrollToAnchor(href), 100);
-        });
-      } else {
-        // 不同页面，先跳转再滚动
-        router.push(route).then(() => {
-          Vue.nextTick(() => {
-            setTimeout(() => scrollToAnchor(href), 200);
-          });
-        });
-      }
-    }
-
     function handleScroll() {
       const scrollTop = window.scrollY || document.documentElement.scrollTop;
       state.isScrolled = scrollTop > 50;
@@ -1600,15 +1200,7 @@ const app = createApp({
 
     // ========== 完整购物车系统 ==========
 
-    async function addToCart(product) {
-      // 如果已登录，使用API添加到购物车
-      if (state.isLoggedIn) {
-        await addToCartAPI(product, 1);
-        state.showCart = true;
-        return;
-      }
-
-      // 未登录时使用本地购物车
+    function addToCart(product) {
       const existing = state.cartItems.find(item => item.product.id === product.id);
       if (existing) {
         existing.quantity++;
@@ -1747,7 +1339,7 @@ const app = createApp({
       state.authError = '';
     }
 
-    async function login() {
+    function login() {
       state.authError = '';
 
       // 扫码登录判断（从 handleLogin 移入）
@@ -1760,7 +1352,7 @@ const app = createApp({
       const password = state.loginForm.password;
 
       if (!username) {
-        state.authError = state.isChinese ? '请输入邮箱' : 'Please enter email';
+        state.authError = state.isChinese ? '请输入用户名' : 'Please enter username';
         return;
       }
       if (!password) {
@@ -1772,24 +1364,30 @@ const app = createApp({
         return;
       }
 
+      let users = [];
       try {
-        const data = await api.login({ email: username, password });
-        state.isLoggedIn = true;
-        state.username = data.user.username;
-        state.currentUser = data.user;
-        localStorage.setItem('agri_username', data.user.username);
-        localStorage.setItem('agri_logged_in', 'true');
-        closeAuthModal();
-        state.cartToast = state.isChinese ? '登录成功，欢迎回来 ' + data.user.username + '！' : 'Login successful, welcome back ' + data.user.username + '!';
-        setTimeout(() => { state.cartToast = ''; }, 2000);
-        // 登录后加载购物车
-        loadCartFromServer();
-      } catch (error) {
-        state.authError = error.message || (state.isChinese ? '登录失败，请重试' : 'Login failed, please try again');
+        const raw = localStorage.getItem('agri_users');
+        if (raw) users = JSON.parse(raw);
+      } catch (e) {
+        users = [];
       }
+
+      const user = users.find(u => u.username === username && u.password === password);
+      if (!user) {
+        state.authError = state.isChinese ? '用户名或密码错误' : 'Invalid username or password';
+        return;
+      }
+
+      state.isLoggedIn = true;
+      state.username = user.username;
+      localStorage.setItem('agri_username', user.username);
+      localStorage.setItem('agri_logged_in', 'true');
+      closeAuthModal();
+      state.cartToast = state.isChinese ? '登录成功，欢迎回来 ' + user.username + '！' : 'Login successful, welcome back ' + user.username + '!';
+      setTimeout(() => { state.cartToast = ''; }, 2000);
     }
 
-    async function register() {
+    function register() {
       state.authError = '';
 
       const username = state.registerForm.username.trim();
@@ -1799,7 +1397,7 @@ const app = createApp({
 
       // 验证码检查（从 handleRegister 移入）
       if (!username) {
-        state.authError = state.isChinese ? '请输入用户名' : 'Please enter username';
+        state.authError = state.isChinese ? '请输入手机号' : 'Please enter phone number';
         return;
       }
       if (!code) {
@@ -1819,36 +1417,51 @@ const app = createApp({
         return;
       }
 
+      let users = [];
       try {
-        const email = username + '@example.com';
-        const data = await api.register({
-          username: username,
-          email: email,
-          password: password
-        });
-        state.isLoggedIn = true;
-        state.username = data.user.username;
-        state.currentUser = data.user;
-        localStorage.setItem('agri_username', data.user.username);
-        localStorage.setItem('agri_logged_in', 'true');
-        closeAuthModal();
-        state.cartToast = state.isChinese ? '注册成功，首单立减20元！' : 'Registration successful, get 20 CNY off your first order!';
-        setTimeout(() => { state.cartToast = ''; }, 3000);
-      } catch (error) {
-        state.authError = error.message || (state.isChinese ? '注册失败，请重试' : 'Registration failed, please try again');
+        const raw = localStorage.getItem('agri_users');
+        if (raw) users = JSON.parse(raw);
+      } catch (e) {
+        users = [];
       }
+
+      if (users.find(u => u.username === username)) {
+        state.authError = state.isChinese ? '该手机号已被注册' : 'This phone number is already registered';
+        return;
+      }
+
+      users.push({
+        username: username,
+        password: password,
+        registerTime: new Date().toISOString(),
+      });
+
+      try {
+        localStorage.setItem('agri_users', JSON.stringify(users));
+      } catch (e) {
+        state.authError = state.isChinese ? '注册失败，请重试' : 'Registration failed, please try again';
+        return;
+      }
+
+      state.isLoggedIn = true;
+      state.username = username;
+      localStorage.setItem('agri_username', username);
+      localStorage.setItem('agri_logged_in', 'true');
+      closeAuthModal();
+      state.cartToast = state.isChinese ? '注册成功，首单立减20元！' : 'Registration successful, get 20 CNY off your first order!';
+      setTimeout(() => { state.cartToast = ''; }, 3000);
     }
 
     function sendVerifyCode() {
       if (state.codeCooldown > 0) return;
       const phone = state.registerForm.username;
-      if (!phone.trim()) { state.authError = state.isChinese ? '请先输入用户名' : 'Enter username first'; return; }
+      if (!phone.trim()) { state.authError = state.isChinese ? '请先输入手机号' : 'Enter phone number first'; return; }
       state.codeCooldown = 60;
       const timer = setInterval(() => {
         state.codeCooldown--;
         if (state.codeCooldown <= 0) clearInterval(timer);
       }, 1000);
-      state.cartToast = state.isChinese ? '验证码已发送（模拟：123456）' : 'Code sent (demo: 123456)';
+      state.cartToast = state.isChinese ? '验证码已发送（模拟）' : 'Code sent (demo)';
       setTimeout(() => { state.cartToast = ''; }, 2000);
     }
 
@@ -1858,116 +1471,17 @@ const app = createApp({
     }
 
     function logout() {
-      api.logout();
       state.isLoggedIn = false;
       state.username = '';
-      state.currentUser = null;
-      state.cartItems = [];
       localStorage.removeItem('agri_username');
-      localStorage.removeItem('agri_logged_in');
       alert(state.isChinese ? '已退出登录' : 'Logged out');
     }
 
-    // ========== GitHub 回调处理 ==========
-    function handleGithubCallback() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const token = urlParams.get('token');
-      const github = urlParams.get('github');
-      const error = urlParams.get('error');
-      
-      if (token && github) {
-        localStorage.setItem('token', token);
-        localStorage.setItem('agri_logged_in', 'true');
-        // 清除 URL 参数
-        window.history.replaceState({}, document.title, window.location.pathname);
-        state.cartToast = state.isChinese ? 'GitHub 登录成功！' : 'GitHub login successful!';
-        checkLoginStatus();
-      } else if (error) {
-        state.cartToast = state.isChinese ? 'GitHub 登录失败，请重试' : 'GitHub login failed, please try again';
-        window.history.replaceState({}, document.title, window.location.pathname);
-      }
-    }
-
-    async function checkLoginStatus() {
-      const token = localStorage.getItem('token');
-      if (token) {
-        try {
-          const data = await api.getCurrentUser();
-          state.isLoggedIn = true;
-          state.username = data.user.username;
-          state.currentUser = data.user;
-          loadCartFromServer();
-        } catch (error) {
-          console.log('Token无效，需要重新登录');
-          api.clearToken();
-        }
-      }
-    }
-
-    // ========== API集成功能 ==========
-
-    async function loadCartFromServer() {
-      try {
-        const data = await api.getCart();
-        state.cartItems = data.items.map(item => ({
-          product: {
-            id: item.product._id,
-            name: item.product.name,
-            price: item.product.price,
-            image: item.product.image,
-            unit: item.product.unit
-          },
-          quantity: item.quantity
-        }));
-      } catch (error) {
-        console.error('加载购物车失败:', error);
-      }
-    }
-
-    async function addToCartAPI(product, quantity = 1) {
-      if (!state.isLoggedIn) {
-        openAuthModal();
-        state.cartToast = state.isChinese ? '请先登录' : 'Please login first';
-        setTimeout(() => { state.cartToast = ''; }, 2000);
-        return;
-      }
-
-      try {
-        await api.addToCart(product.id || product._id, quantity);
-        await loadCartFromServer();
-        state.cartToast = state.isChinese ? '已添加到购物车' : 'Added to cart';
-        setTimeout(() => { state.cartToast = ''; }, 2000);
-      } catch (error) {
-        state.cartToast = error.message || (state.isChinese ? '添加失败' : 'Add failed');
-        setTimeout(() => { state.cartToast = ''; }, 2000);
-      }
-    }
-
-    async function updateCartItemAPI(productId, updates) {
-      try {
-        await api.updateCartItem(productId, updates);
-        await loadCartFromServer();
-      } catch (error) {
-        console.error('更新购物车失败:', error);
-      }
-    }
-
-    async function removeFromCartAPI(productId) {
-      try {
-        await api.removeFromCart(productId);
-        await loadCartFromServer();
-      } catch (error) {
-        console.error('移除商品失败:', error);
-      }
-    }
-
-    async function createOrder(orderData) {
-      try {
-        const data = await api.createOrder(orderData);
-        state.cartItems = [];
-        return data.order;
-      } catch (error) {
-        throw error;
+    function checkLoginStatus() {
+      const saved = localStorage.getItem('agri_username');
+      if (saved) {
+        state.isLoggedIn = true;
+        state.username = saved;
       }
     }
 
@@ -2021,7 +1535,6 @@ const app = createApp({
     onMounted(() => {
       loadTheme();
       loadLanguage();
-      handleGithubCallback();
       checkLoginStatus();
       loadCart();
 
@@ -2056,7 +1569,6 @@ const app = createApp({
       handleSearch,
       scrollToTop,
       scrollToAnchor,
-      navigateTo,
       addToCart,
       removeFromCart,
       updateQuantity,

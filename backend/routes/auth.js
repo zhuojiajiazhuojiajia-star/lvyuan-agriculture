@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
 const User = require('../models/User');
 const { protect } = require('../middleware/auth');
+const axios = require('axios');
 
 const router = express.Router();
 
@@ -154,6 +155,89 @@ router.put('/password', protect, async (req, res) => {
     res.json({ success: true, message: '密码修改成功' });
   } catch (error) {
     res.status(500).json({ message: '密码修改失败', error: error.message });
+  }
+});
+
+// @route   GET /api/auth/github
+// @desc    GitHub 登录 - 跳转到 GitHub 授权页面
+// @access  Public
+router.get('/github', (req, res) => {
+  const clientId = process.env.GITHUB_CLIENT_ID;
+  const frontendUrl = process.env.FRONTEND_URL || 'https://effulgent-pie-2853b3.netlify.app';
+  const redirectUri = encodeURIComponent(process.env.GITHUB_CALLBACK_URL || 'https://lvyuan-backend-production-4f2d.up.railway.app/api/auth/github/callback');
+  const scope = 'read:user user:email';
+  
+  const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}`;
+  res.redirect(githubAuthUrl);
+});
+
+// @route   GET /api/auth/github/callback
+// @desc    GitHub 登录回调
+// @access  Public
+router.get('/github/callback', async (req, res) => {
+  const { code } = req.query;
+  const frontendUrl = process.env.FRONTEND_URL || 'https://effulgent-pie-2853b3.netlify.app';
+  
+  try {
+    // 用 code 换取 access_token
+    const tokenResponse = await axios.post('https://github.com/login/oauth/access_token', {
+      client_id: process.env.GITHUB_CLIENT_ID,
+      client_secret: process.env.GITHUB_CLIENT_SECRET,
+      code
+    }, {
+      headers: { Accept: 'application/json' }
+    });
+    
+    const accessToken = tokenResponse.data.access_token;
+    if (!accessToken) {
+      return res.redirect(`${frontendUrl}/login?error=github_auth_failed`);
+    }
+    
+    // 获取 GitHub 用户信息
+    const userResponse = await axios.get('https://api.github.com/user', {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    });
+    
+    const githubUser = userResponse.data;
+    
+    // 获取邮箱
+    const emailResponse = await axios.get('https://api.github.com/user/emails', {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    });
+    const primaryEmail = emailResponse.data.find(e => e.primary)?.email || githubUser.email || `${githubUser.id}@github.com`;
+    
+    // 查找或创建用户
+    let user = await User.findOne({ githubId: githubUser.id });
+    
+    if (!user) {
+      // 检查邮箱是否已注册
+      user = await User.findOne({ email: primaryEmail });
+      if (user) {
+        // 关联 GitHub 账号
+        user.githubId = githubUser.id;
+        user.avatar = user.avatar || githubUser.avatar_url;
+        await user.save();
+      } else {
+        // 创建新用户
+        user = await User.create({
+          name: githubUser.name || githubUser.login,
+          username: githubUser.login,
+          email: primaryEmail,
+          password: 'github_' + githubUser.id + '_oauth',
+          avatar: githubUser.avatar_url,
+          githubId: githubUser.id
+        });
+      }
+    }
+    
+    // 生成 JWT
+    const token = generateToken(user._id);
+    
+    // 重定向到前端，带上 token
+    res.redirect(`${frontendUrl}/login?token=${token}&github=true`);
+  } catch (error) {
+    console.error('GitHub 登录失败:', error.message);
+    res.redirect(`${frontendUrl}/login?error=github_login_failed`);
   }
 });
 
