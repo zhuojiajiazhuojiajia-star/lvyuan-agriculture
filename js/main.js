@@ -719,7 +719,7 @@ const app = createApp({
       // ---- 用户认证状态 ----
       showAuthModal: false,
       authMode: 'login',
-      loginMethod: 'qr',
+      loginMethod: 'password',
       qrType: 'wechat',
       qrExpired: false,
       codeCooldown: 0,
