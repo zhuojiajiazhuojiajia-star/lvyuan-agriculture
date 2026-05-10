@@ -281,11 +281,11 @@ const ProductsPage = {
       <section class="section">
         <div class="container">
           <div class="product-category-tabs">
-            <button :class="{ active: currentCategory === 'all' }" @click="currentCategory = 'all'">{{ state.isChinese ? '全部' : 'All' }}</button>
-            <button :class="{ active: currentCategory === 'vegetable' }" @click="currentCategory = 'vegetable'">{{ state.isChinese ? '新鲜蔬菜' : 'Fresh Vegetables' }}</button>
-            <button :class="{ active: currentCategory === 'fruit' }" @click="currentCategory = 'fruit'">{{ state.isChinese ? '有机水果' : 'Organic Fruits' }}</button>
-            <button :class="{ active: currentCategory === 'grain' }" @click="currentCategory = 'grain'">{{ state.isChinese ? '优质谷物' : 'Premium Grains' }}</button>
-            <button :class="{ active: currentCategory === 'dairy' }" @click="currentCategory = 'dairy'">{{ state.isChinese ? '乳制品' : 'Dairy Products' }}</button>
+            <button :class="{ active: currentCategory === 'all' }" @click="setCategory('all')">{{ state.isChinese ? '全部' : 'All' }}</button>
+            <button :class="{ active: currentCategory === 'vegetable' }" @click="setCategory('vegetable')">{{ state.isChinese ? '新鲜蔬菜' : 'Fresh Vegetables' }}</button>
+            <button :class="{ active: currentCategory === 'fruit' }" @click="setCategory('fruit')">{{ state.isChinese ? '有机水果' : 'Organic Fruits' }}</button>
+            <button :class="{ active: currentCategory === 'grain' }" @click="setCategory('grain')">{{ state.isChinese ? '优质谷物' : 'Premium Grains' }}</button>
+            <button :class="{ active: currentCategory === 'dairy' }" @click="setCategory('dairy')">{{ state.isChinese ? '乳制品' : 'Dairy Products' }}</button>
           </div>
           <div class="products-grid">
             <article v-for="product in filteredByCategory" :key="product.id" class="product-card">
@@ -315,6 +315,17 @@ const ProductsPage = {
     </div>
   `,
   data() { return { currentCategory: 'all', hoveredImage: {}, searchKeyword: '' }; },
+  methods: {
+    setCategory(cat) {
+      this.currentCategory = cat;
+      // 同步更新 URL，这样导航栏再点分类时能正确触发
+      if (cat === 'all') {
+        this.$router.push('/products');
+      } else {
+        this.$router.push('/products?category=' + cat);
+      }
+    }
+  },
   created() {
     const kw = this.$route.query.keyword || '';
     if (kw) this.searchKeyword = kw;
