@@ -684,7 +684,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHashHistory('/lvyuan-agriculture/'),
+  history: createWebHashHistory(),
   routes,
   scrollBehavior() { return { top: 0 }; },
 });
@@ -1549,11 +1549,14 @@ const app = createApp({
       state.showMobileMenu = false;
       document.body.style.overflow = '';
       if (!href || href === '#') return;
-      const el = document.querySelector(href);
-      if (el) {
-        const offset = el.offsetTop - 80;
-        window.scrollTo({ top: offset, behavior: 'smooth' });
-      }
+      // 等待 DOM 渲染
+      setTimeout(() => {
+        const el = document.querySelector(href);
+        if (el) {
+          const offset = el.offsetTop - 80;
+          window.scrollTo({ top: offset, behavior: 'smooth' });
+        }
+      }, 100);
     }
 
     function navigateTo(route, href) {
@@ -1580,13 +1583,13 @@ const app = createApp({
       if (currentPathNoQuery === targetPath) {
         // 同一页面，直接滚动
         Vue.nextTick(() => {
-          setTimeout(() => scrollToAnchor(href), 100);
+          setTimeout(() => scrollToAnchor(href), 300);
         });
       } else {
         // 不同页面，先跳转再滚动
         router.push(route).then(() => {
           Vue.nextTick(() => {
-            setTimeout(() => scrollToAnchor(href), 200);
+            setTimeout(() => scrollToAnchor(href), 500);
           });
         });
       }
