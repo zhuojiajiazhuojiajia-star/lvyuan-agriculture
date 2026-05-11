@@ -721,7 +721,14 @@ const routes = [
 const router = createRouter({
   history: createWebHashHistory(),
   routes,
-  scrollBehavior() { return { top: 0 }; },
+  scrollBehavior(to, from, savedPosition) {
+    // 如果有 savedPosition（浏览器前进/后退），恢复之前的位置
+    if (savedPosition) return savedPosition;
+    // 如果目标路由带有 query 参数（分类筛选、项目高亮），不自动滚到顶部
+    if (to.query.category || to.query.project) return false;
+    // 其他情况滚到顶部
+    return { top: 0, behavior: 'smooth' };
+  },
 });
 
 // ========== 创建 Vue 应用 ==========
