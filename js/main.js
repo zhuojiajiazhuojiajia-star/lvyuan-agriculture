@@ -601,29 +601,33 @@ const CasesPage = {
     }
   },
   mounted() {
-    if (this.highlightProject >= 0) {
-      setTimeout(() => {
-        const items = document.querySelectorAll('.case-item');
-        if (items[this.highlightProject]) {
-          const offset = items[this.highlightProject].offsetTop - 100;
-          window.scrollTo({ top: offset, behavior: 'smooth' });
-          items[this.highlightProject].classList.add('case-highlight');
-        }
-      }, 300);
-    }
+    this.scrollToProject(this.highlightProject);
   },
   watch: {
     '$route.query.project'(val) {
+      // 先清除所有高亮
+      document.querySelectorAll('.case-item').forEach(el => el.classList.remove('case-highlight'));
       if (val !== undefined && val !== null) {
         this.highlightProject = parseInt(val);
+        this.scrollToProject(this.highlightProject);
+      } else {
+        this.highlightProject = -1;
+      }
+    }
+  },
+  methods: {
+    scrollToProject(idx) {
+      if (idx < 0) return;
+      this.$nextTick(() => {
         setTimeout(() => {
           const items = document.querySelectorAll('.case-item');
-          if (items[this.highlightProject]) {
-            const offset = items[this.highlightProject].offsetTop - 100;
+          if (items[idx]) {
+            const offset = items[idx].offsetTop - 100;
             window.scrollTo({ top: offset, behavior: 'smooth' });
+            items[idx].classList.add('case-highlight');
           }
-        }, 300);
-      }
+        }, 400);
+      });
     }
   },
 };
