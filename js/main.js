@@ -1595,6 +1595,19 @@ const app = createApp({
       const currentPathNoQuery = currentPath.split('?')[0];
       const targetPath = route.split('?')[0];
       
+      // 如果 route 带有 project 参数（金色麦田、智能温室、生态农场）
+      if (route.includes('project=')) {
+        if (currentPathNoQuery === targetPath) {
+          // 同一页面，需要重新触发 watch
+          router.push({ path: targetPath, query: {} }).then(() => {
+            setTimeout(() => router.push(route), 50);
+          });
+        } else {
+          router.push(route);
+        }
+        return;
+      }
+      
       // 如果 href 是锚点（以 # 开头）
       if (href && href.startsWith('#')) {
         if (currentPathNoQuery === targetPath) {
